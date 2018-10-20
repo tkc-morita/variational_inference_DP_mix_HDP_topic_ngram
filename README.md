@@ -58,4 +58,4 @@ You'll get four files.
 - `VI_DP_ngram.log`
 	- Log of the update.
 	- The recorded "var_bound" (i.e. ELBO) doesn't include constant terms (for computational efficiency).
-	- To get the constant term, run `get_var_bound_constant.py`
+	- To get the constant term, run `get_var_bound_constant.py`.
