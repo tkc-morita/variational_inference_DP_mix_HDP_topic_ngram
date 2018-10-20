@@ -1,3 +1,8 @@
+# No data should be uploaded for license reasons.
 data
+
+# Results are too heavy to upload.
 results*
+
+# No compiled files.
 *.pyc
