@@ -1,0 +1,29 @@
+---
+title: "Predicting the dative alternation by Latinateness"
+author: "Takashi Morita"
+output:
+  pdf_document:
+    latex_engine: lualatex
+    toc: true
+    toc_depth: 3
+  html_notebook: default
+documentclass: ltjsarticle
+---
+
+# Preparation
+
+```{R}
+# Stats
+library(tidyverse)
+library(brms)
+library(lme4)
+library(lmerTest)
+library(plotrix)
+
+# Data
+library(languageR)
+data(dative)
+table(dative$Verb)
+nrow(dative)
+lm_Bresnan = lm
+```
