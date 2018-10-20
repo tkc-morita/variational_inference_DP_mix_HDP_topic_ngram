@@ -6,3 +6,4 @@ results*
 
 # No compiled files.
 *.pyc
+.DS_Store
