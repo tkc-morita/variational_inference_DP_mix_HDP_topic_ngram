@@ -50,7 +50,14 @@ with the following options:
 ## Results
 
 Edit the `code/result_dir_info.txt` file to specify the directory where you save the results.
-The program will create a subdirectories ``
+The program will create subdirectories `[data_filename]/[job_id]` in the directory.
+For example, if
+
+- your path in `result_dir_info.txt` is `../results_eg`
+- your data is `../data/example.tsv`, and
+- the `-j` option is `10`,
+
+then the results will be saved in `../results_eg/example/10`.
 
 You'll get four files.
 - `SubLexica_assignment.csv`
