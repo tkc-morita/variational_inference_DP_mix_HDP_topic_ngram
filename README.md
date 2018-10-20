@@ -41,5 +41,21 @@ with the following options:
 	- default=1.0
 - `-j`/`--jobid`
 	- Job ID #
-	- default=Start date & time (e.g. )
-	parser.add_argument("-k", "--data_column", type=str, help="Column name for the inputs.", default='IPA_csv')
+	- default=Start date & time (e.g. "18-10-20-12-30-14-551728")
+- `-k`/`--data_column`
+	- Column name for the inputs
+	- default='IPA_csv'
+
+## Results
+
+You'll get four files.
+- `SubLexica_assignment.csv`
+	- Classification probabilities of words (indexed by "customer_id", following the CRP convention).
+- `symbol_coding.csv`
+	- Code map from b/w data symbols and their integer id.
+- `variational_parameters.h5`
+	- Variatrional parameters of the model.
+- `VI_DP_ngram.log`
+	- Log of the update.
+	- The recorded "var_bound" (i.e. ELBO) doesn't include constant terms (for computational efficiency).
+	- To get the constant term, run `get_var_bound_constant.py`

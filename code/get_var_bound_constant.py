@@ -10,7 +10,7 @@ def get_result_dir():
 	with open('result_dir_info.txt', 'r') as f:
 		result_dir = os.path.join(
 						f.readlines()[0].strip(),
-						'topic_indep_simplified'
+						'DP-mix_HDP-topic-ngram'
 						)
 	return result_dir
 
@@ -42,7 +42,6 @@ if __name__=='__main__':
 	tmp_result_path = os.path.join(
 					get_result_dir(),
 					data_root,
-					("Dirichlet-concent-%s" % str(dirichlet_concentration)),
 					'constant-of-ELBO'
 					)
 	os.makedirs(tmp_result_path)
