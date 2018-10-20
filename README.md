@@ -27,9 +27,19 @@ with the following options:
 - `-n`/`--ngram`
 	- Context length of ngram
 	- default=3
-- `-i` "--iterations", type=int, help="Maxmum # of iterations", default=2500)
-	parser.add_argument("-T", "--tolerance", type=np.float64, help="Tolerance level to detect convergence", default=0.1)
-	parser.add_argument("-s", "--sublex", type=int, help="Max # of sublexica", default=10)
-	parser.add_argument("-c", "--topic_base_counts", type=np.float64, help="Concentration for top level dirichlet distribution", default=1.0)
-	parser.add_argument("-j", "--jobid", type=str, help='Job ID #', default=None)
+- `-i`/`--iterations`
+	- Maxmum # of iterations
+	- default=2500
+- `-T`/`--tolerance`
+	- Tolerance level to detect convergence
+	- default=0.1
+- `-s`/`--sublex`
+	- Max # of sublexica
+	- default=10
+- `-c`/`--topic_base_counts`
+	- Concentration for top level dirichlet distribution
+	- default=1.0
+- `-j`/`--jobid`
+	- Job ID #
+	- default=Start date & time (e.g. )
 	parser.add_argument("-k", "--data_column", type=str, help="Column name for the inputs.", default='IPA_csv')

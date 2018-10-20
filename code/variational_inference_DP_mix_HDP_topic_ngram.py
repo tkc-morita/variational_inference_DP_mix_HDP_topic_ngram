@@ -42,10 +42,8 @@ class VariationalInference(object):
 		
 		logger.info('DP mixture of words.')
 		self.n=n
-		logger.info('The base distribution is INDEPENDENT %i-gram with DP backoff.' % n)
-		logger.info('Log files prior to 2017/10/21 have incorrectly state the base distribution is SHARED.')
+		logger.info('The base distribution is %i-gram with DP backoff.' % n)
 		
-		logger.info('Long vowels and geminates are now (from 03/16/2017) treated as independent segments.')
 		logger.info('Script last updated at %s'
 							% datetime.datetime.fromtimestamp(
 									os.stat(sys.argv[0]).st_mtime
