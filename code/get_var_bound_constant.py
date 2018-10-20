@@ -37,11 +37,11 @@ if __name__=='__main__':
 	concent_priors = np.array((10.0,10.0)) # Gamma parameters (shape, INVERSE of scale) for prior on concentration.
 	dirichlet_concentration = options['DirichletConcentration']
 
-	data_root = os.path.splitext(datapath.split('/')[-1])[0]
+	data_filename = os.path.splitext(datapath.split('/')[-1])[0]
 	
 	tmp_result_path = os.path.join(
 					get_result_dir(),
-					data_root,
+					data_filename,
 					'constant-of-ELBO'
 					)
 	os.makedirs(tmp_result_path)

@@ -18,6 +18,7 @@ Python 3 is not supported.
 1. Prepare your data.
 	- .tsv file
 	- Data column should have strings of comma-separated symbols (e.g. a,b,c for the string "abc").
+2. Move to the `code` directory.
 2. Run the following:
 ```bash
 python learning.py PATH/TO/YOUR/DATA
@@ -47,6 +48,9 @@ with the following options:
 	- default='IPA_csv'
 
 ## Results
+
+Edit the `code/result_dir_info.txt` file to specify the directory where you save the results.
+The program will create a subdirectories ``
 
 You'll get four files.
 - `SubLexica_assignment.csv`

@@ -41,7 +41,7 @@ if __name__=='__main__':
 	topic_base_counts = options['topic_base_counts']
 
 	result_dir = get_result_dir()
-	data_root = os.path.splitext(datapath.split('/')[-1])[0]
+	data_filename = os.path.splitext(datapath.split('/')[-1])[0]
 	
 	now = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S-%f')
 	if options["jobid"] is None:
@@ -50,7 +50,7 @@ if __name__=='__main__':
 		job_id = options["jobid"]+'_'+now
 	tmp_result_path = os.path.join(
 					result_dir,
-					data_root,
+					data_filename,
 					job_id
 					)
 	os.makedirs(tmp_result_path)
