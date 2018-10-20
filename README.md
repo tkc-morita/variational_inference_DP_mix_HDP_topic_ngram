@@ -1,5 +1,5 @@
 # variational_inference_DP_mix_HDP_topic_ngram
-This is a bundle of Python (2.7) programs for variational inference for DP mixture of HDP ngram backoff model (generalized by HDP topic model).
+This is a repo of Python (2.7) programs for variational inference for DP mixture of HDP ngram backoff model (generalized by HDP topic model).
 See
 
 	Morita, T. (2018) "Unsupervised Learning of Lexical Subclasses from Phonotactics." MIT Ph.D Thesis.
