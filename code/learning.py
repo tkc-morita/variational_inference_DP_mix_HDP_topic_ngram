@@ -6,17 +6,11 @@ import os, datetime, shutil
 import pandas as pd
 import argparse
 
-def get_result_dir():
-	with open('result_dir_info.txt', 'r') as f:
-		result_dir = os.path.join(
-						f.readlines()[0].strip(),
-						'DP-mix_HDP-topic-ngram'
-						)
-	return result_dir
 
 if __name__=='__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument("data", type=str, help="Path to data", default='../data/BCCWJ_frequencylist_suw_ver1_0_core-nouns_5th-ed.tsv')
+	parser.add_argument("data_path", type=str, help="Path to data")
+	parser.add_argument("-r", "--result_path", type=str, help="Path to the directory where you want to save results. (Several subdirectories will be created.)", default='../results_debug')
 	parser.add_argument("-n", "--ngram", type=int, help="Ngram length", default=3)
 	parser.add_argument("-i", "--iterations", type=int, help="Maxmum # of iterations", default=2500)
 	parser.add_argument("-T", "--tolerance", type=np.float64, help="Tolerance level to detect convergence", default=0.1)
@@ -27,11 +21,10 @@ if __name__=='__main__':
 
 	options=vars(parser.parse_args())
 	
-	datapath = options['data']
 	
-	data_prefix=os.path.split(datapath.rstrip('/'))[-1]
+	data_prefix=os.path.split(options['data_path'].rstrip('/'))[-1]
 
-	df = pd.read_csv(datapath, sep='\t', encoding='utf-8')
+	df = pd.read_csv(options['data_path'], sep='\t', encoding='utf-8')
 	
 	data,encoder,decoder = vin.code_data(df[options['data_column']])
 	
@@ -40,8 +33,11 @@ if __name__=='__main__':
 	concent_priors = np.array((10.0,10.0)) # Gamma parameters (shape, INVERSE of scale) for prior on concentration.
 	topic_base_counts = options['topic_base_counts']
 
-	result_dir = get_result_dir()
-	data_filename = os.path.splitext(datapath.split('/')[-1])[0]
+	result_dir = os.path.join(
+						options['result_path'],
+						'DP-mix_HDP-topic-ngram'
+						)
+	data_filename = os.path.splitext(options['data_path'].split('/')[-1])[0]
 	
 	now = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S-%f')
 	if options["jobid"] is None:

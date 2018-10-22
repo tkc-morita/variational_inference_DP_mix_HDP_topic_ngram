@@ -16,19 +16,19 @@ def get_result_dir():
 
 if __name__=='__main__':
 	parser = argparse.ArgumentParser()
+	parser.add_argument("data_path", type=str, help="Path to data")
+	parser.add_argument("-r", "--result_path", type=str, help="Path to the directory where you want to save results. (Several subdirectories will be created.)", default='../results_debug')
 	parser.add_argument("-n", "--ngram", type=int, help="Context length of ngram", default=3)
-	parser.add_argument("-d", "--data", type=str, help="Path to data", default='../data/BCCWJ_frequencylist_suw_ver1_0_core-nouns_4th-ed.tsv')
 	parser.add_argument("-s", "--sublex", type=int, help="Max # of sublexica", default=10)
 	parser.add_argument("-c", "--DirichletConcentration", type=np.float64, help="Concentration for top level dirichlet distribution", default=1.0)
 	parser.add_argument("-k", "--dataColumn", type=str, help="Column name for the inputs.", default='IPA_csv')
 
 	options=vars(parser.parse_args())
 	
-	datapath = options['data']
 	
-	data_prefix=os.path.split(datapath.rstrip('/'))[-1]
+	data_prefix=os.path.split(options['data_path'].rstrip('/'))[-1]
 
-	df = pd.read_csv(datapath, sep='\t', encoding='utf-8')
+	df = pd.read_csv(options['data_path'], sep='\t', encoding='utf-8')
 	
 	data,encoder,decoder = vin.code_data(df[options['dataColumn']])
 	
@@ -37,10 +37,11 @@ if __name__=='__main__':
 	concent_priors = np.array((10.0,10.0)) # Gamma parameters (shape, INVERSE of scale) for prior on concentration.
 	dirichlet_concentration = options['DirichletConcentration']
 
-	data_filename = os.path.splitext(datapath.split('/')[-1])[0]
+	data_filename = os.path.splitext(options['data_path'].split('/')[-1])[0]
 	
 	tmp_result_path = os.path.join(
-					get_result_dir(),
+					options['result_path'],
+					'DP-mix_HDP-topic-ngram',
 					data_filename,
 					'constant-of-ELBO'
 					)

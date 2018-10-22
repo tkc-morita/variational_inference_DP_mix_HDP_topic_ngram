@@ -25,6 +25,9 @@ python learning.py PATH/TO/YOUR/DATA
 ```
 with the following options:
 
+- `-r`/`--result_path`
+	- Path to the directory where you want to save results. (Several subdirectories will be created. See below.)
+	- default='../results_debug'
 - `-n`/`--ngram`
 	- Context length of ngram
 	- default=3
@@ -49,11 +52,10 @@ with the following options:
 
 ## Results
 
-Edit the `code/result_dir_info.txt` file to specify the directory where you save the results.
-The program will create subdirectories `[data_filename]/[job_id]` in the directory.
+The program will create subdirectories `[data_filename]/[job_id]` in the directory specified by the `--result_path` option.
 For example, if
 
-- your path in `result_dir_info.txt` is `../results_eg`
+- your `--result_path` is `../results_eg`
 - your data is `../data/example.tsv`, and
 - the `-j` option is `10`,
 
