@@ -9,7 +9,7 @@ for details on the model.
 ## Dependencies
 
 - [anaconda2](https://www.anaconda.com/download/)
-- [pytable](https://www.pytables.org/usersguide/installation.html)
+- [pytables](https://www.pytables.org/usersguide/installation.html)
 
 Python 3 is not supported.
 
