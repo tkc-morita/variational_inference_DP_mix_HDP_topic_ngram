@@ -11,7 +11,7 @@ if __name__=='__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument("data_path", type=str, help="Path to data")
 	parser.add_argument("-r", "--result_path", type=str, help="Path to the directory where you want to save results. (Several subdirectories will be created.)", default='../results_debug')
-	parser.add_argument("-n", "--ngram", type=int, help="Ngram length", default=3)
+	parser.add_argument("-n", "--ngram", type=int, help="Ngram length. Only 2 and longer grams are currently supported (i.e., no support for 1gram).", default=3)
 	parser.add_argument("-i", "--iterations", type=int, help="Maxmum # of iterations", default=2500)
 	parser.add_argument("-T", "--tolerance", type=np.float64, help="Tolerance level to detect convergence", default=0.1)
 	parser.add_argument("-s", "--sublex", type=int, help="Max # of sublexica", default=10)
@@ -53,6 +53,7 @@ if __name__=='__main__':
 
 	num_sublex = options['sublex']
 	n = options['ngram']
+	assert n > 1, "Only 2 and longer grams are supported."
 	base_num_clusters = len(decoder)*2
 
 	vi = vin.VariationalInference(

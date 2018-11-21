@@ -29,7 +29,7 @@ with the following options:
 	- Path to the directory where you want to save results. (Several subdirectories will be created. See below.)
 	- default='../results_debug'
 - `-n`/`--ngram`
-	- Context length of ngram
+	- Context length of ngram. Only 2 and longer grams are currently supported (i.e., no support for 1gram).
 	- default=3
 - `-i`/`--iterations`
 	- Maxmum # of iterations
