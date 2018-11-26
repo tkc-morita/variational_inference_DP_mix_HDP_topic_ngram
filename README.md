@@ -25,30 +25,41 @@ python learning.py PATH/TO/YOUR/DATA
 ```
 with the following options:
 
-- `-r`/`--result_path`
-	- Path to the directory where you want to save results. (Several subdirectories will be created. See below.)
-	- default='../results_debug'
-- `-n`/`--ngram`
-	- Context length of ngram. Only 2 and longer grams are currently supported (i.e., no support for 1gram).
-	- default=3
-- `-i`/`--iterations`
-	- Maxmum # of iterations
-	- default=2500
-- `-T`/`--tolerance`
-	- Tolerance level to detect convergence
-	- default=0.1
-- `-s`/`--sublex`
-	- Max # of sublexica
-	- default=10
-- `-c`/`--topic_base_counts`
-	- Concentration for top level dirichlet distribution
-	- default=1.0
-- `-j`/`--jobid`
-	- Job ID #
-	- default=Start date & time (e.g. "18-10-20-12-30-14-551728")
-- `-k`/`--data_column`
-	- Column name for the inputs
-	- default='IPA_csv'
+- Specifying data.
+	- `-k`/`--data_column`
+		- Column name for the inputs
+		- default='IPA_csv'
+- Saving results.
+	- `-r`/`--result_path`
+		- Path to the directory where you want to save results. (Several subdirectories will be created. See below.)
+		- default='../results_debug'
+	- `-j`/`--jobid`
+		- Job ID #. Used as a part of the path to the directory where results are saved (useful for computing clusters).
+		- default=Start date & time (e.g. "18-10-20-12-30-14-551728")
+- Model parameters.
+	- `-n`/`--ngram`
+		- Context length of ngram. Only 2 and longer grams are currently supported (i.e., no support for 1gram).
+		- default=3
+	- `-S`/`--shape_of_sublex_concentration`
+		- Shape parameter of the Gamma prior on the concentration of the sublexicon DP.
+		- default=10.0
+	- `-R`/`--rate_of_sublex_concentration`
+		- Rate (= inverse of scale) parameter of the Gamma prior on the concentration of the sublexicon DP.
+		- default=10.0
+	- `-c`/`--topic_base_counts`
+		- Concentration for top level dirichlet distribution.
+		- default=1.0
+- Variational inference.
+	- `-i`/`--iterations`
+		- Maxmum # of iterations
+		- default=2500
+	- `-T`/`--tolerance`
+		- Tolerance level to detect convergence
+		- default=0.1
+	- `-s`/`--sublex`
+		- Max # of sublexica
+		- default=10
+
 
 ## Results
 

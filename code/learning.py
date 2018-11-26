@@ -18,6 +18,9 @@ if __name__=='__main__':
 	parser.add_argument("-c", "--topic_base_counts", type=np.float64, help="Concentration for top level dirichlet distribution", default=1.0)
 	parser.add_argument("-j", "--jobid", type=str, help='Job ID #', default=None)
 	parser.add_argument("-k", "--data_column", type=str, help="Column name for the inputs.", default='IPA_csv')
+	parser.add_argument("-S", "--shape_of_sublex_concentration", type=np.float64, help="Shape parameter of the Gamma prior on the concentration of the sublexicon DP.", default=10.0)
+	parser.add_argument("-R", "--rate_of_sublex_concentration", type=np.float64, help="Rate (= inverse of scale) parameter of the Gamma prior on the concentration of the sublexicon DP.", default=10.0)
+
 
 	options=vars(parser.parse_args())
 	
@@ -30,7 +33,7 @@ if __name__=='__main__':
 	
 	
 	T_scalar = 2 # (# of tables) = 2*(# of symbols).
-	concent_priors = np.array((10.0,10.0)) # Gamma parameters (shape, INVERSE of scale) for prior on concentration.
+	concent_priors = np.array((options['shape_of_sublex_concentration'],options['rate_of_sublex_concentration'])) # Gamma parameters (shape, INVERSE of scale) for prior on concentration.
 	topic_base_counts = options['topic_base_counts']
 
 	result_dir = os.path.join(
