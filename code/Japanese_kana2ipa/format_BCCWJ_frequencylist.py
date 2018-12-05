@@ -26,7 +26,7 @@ if __name__ == '__main__':
 		directory, data_filename = os.path.split(args.data_path)
 		save_filename_wo_ext, ext = os.path.splitext(data_filename)
 		save_filename_wo_ext += '_with-IPA-of-core-nouns'
-		save_path = os.path.join(directory, save_filename + ext)
+		save_path = os.path.join(directory, save_filename_wo_ext + ext)
 	else:
 		save_path = args.save
 	df_core.to_csv(save_path, index=False, encoding='utf-8', sep='\t')
