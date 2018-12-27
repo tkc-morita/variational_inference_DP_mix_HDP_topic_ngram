@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import variational_inference_DP_topic_ngram_mix_indep_matrix as vin
+import variational_inference_DP_mix_HDP_topic_ngram as vin
 import numpy as np
 import os, datetime, shutil
 import pandas as pd
@@ -60,6 +60,8 @@ if __name__=='__main__':
 			dirichlet_concentration,
 			tmp_result_path
 			)
+
+	os.removedirs(tmp_result_path)
 
 	print(str(vi.get_var_constant()))
 

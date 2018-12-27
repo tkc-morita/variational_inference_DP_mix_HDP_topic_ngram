@@ -8,11 +8,11 @@ import sys, os.path
 
 def plot_ELBO(df, result_dir):
 	df.plot(x='iteration',y='ELBO',legend=False)
-	plt.title('ELBO track')
+	plt.title('History of ELBO')
 	plt.ylabel('ELBO')
 	plt.tight_layout()
 	# plt.show()
-	plt.savefig(os.path.join(result_dir,'ELBO_track.png'), bbox_inches='tight')
+	plt.savefig(os.path.join(result_dir,'ELBO_history.png'), bbox_inches='tight')
 
 def extract_ELBO(path):
 	elbos = []

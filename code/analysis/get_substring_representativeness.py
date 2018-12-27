@@ -6,6 +6,25 @@ import scipy.misc as spm
 import encode_decode, parse_vi
 import argparse, os.path
 
+def get_log_assignment_over_others(log_assignment_probs):
+	"""
+	Returns a square matrix A s.t.:
+	a_ij = -np.inf if i==j
+	a_ij = p(t_j) / (1 - p(t_i)) otherwise
+	"""
+	log_assignment_to_others = np.repeat(log_assignment_probs[np.newaxis,:], log_assignment_probs.size, axis=0)
+	np.fill_diagonal(log_assignment_to_others, -np.inf)
+	log_assignment_to_others = spm.logsumexp(log_assignment_to_others, axis=1)
+	log_assignment_over_others = log_assignment_probs[np.newaxis,:] - log_assignment_to_others[:,np.newaxis]
+	np.fill_diagonal(log_assignment_over_others, -np.inf)
+	return log_assignment_over_others
+
+def get_representativeness(log_like, log_assignment_over_others):
+	"""
+	Tenenbaum & Griffiths (2001: Eq.4).
+	"""
+	log_denominator = spm.logsumexp(log_like[np.newaxis,:] + log_assignment_over_others, axis=1)
+	return log_like - log_denominator
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -27,9 +46,9 @@ if __name__ == "__main__":
 	log_like = np.ma.log(sub_df_like.groupby('sublex', sort=True).prob.sum().values)
 
 	log_assignment_probs = parse_vi.get_log_sublex_assignment_probs(args.result_dir)
+	log_assignment_over_others = get_log_assignment_over_others(log_assignment_probs)
 
-	log_posterior = log_like + log_assignment_probs
-	log_posterior -= spm.logsumexp(log_posterior)
+	representativeness = get_representativeness(log_like, log_assignment_over_others)
 
-	for sublex,p in enumerate(np.exp(log_posterior)):
-		print('sublex_{sublex}: {p:.4f}'.format(sublex=sublex, p=p))
+	for sublex,r in enumerate(representativeness):
+		print('sublex_{sublex}: {r:.4f}'.format(sublex=sublex, r=r))
