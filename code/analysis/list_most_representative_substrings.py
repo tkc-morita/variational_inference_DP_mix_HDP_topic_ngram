@@ -7,6 +7,13 @@ import encode_decode, parse_vi
 import get_substring_representativeness as rep
 import argparse, os.path
 
+def to_int_code(string, encoder):
+	try:
+		out = int(string)
+	except:
+		out = encoder[string]
+	return out
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('likelihood_csv', type=str, help='Path to the csv file containing likelihood info.')
@@ -26,13 +33,15 @@ if __name__ == "__main__":
 	df_like['log_like'] = df_like.prob.map(np.ma.log)
 
 	if not args.frequency_csv is None:
-		df_freq = pd.read_csv(args.frequency_csv, encoding='utf-8').loc[:,['context','value','sublex_id','frequency']]
+		df_freq = pd.read_csv(args.frequency_csv, encoding='utf-8')
 		df_freq = df_freq.rename(columns={'value':string_cols[-1],'sublex_id':'sublex'})
-		df_freq = pd.concat([
-					df_freq,
-					df_freq.context.str.split('_', expand=True).rename(columns={ix:col for ix,col in enumerate(string_cols[:-1])}).astype(int)
-					],
-					axis=1)
+		df_freq[string_cols[-1]] = df_freq[string_cols[-1]].map(lambda s: to_int_code(s, encoder))
+		if args.string_length > 1:
+			df_freq = pd.concat([
+						df_freq,
+						df_freq.context.str.split('_', expand=True).rename(columns={ix:col for ix,col in enumerate(string_cols[:-1])}).applymap(lambda s: to_int_code(s, encoder))
+						],
+						axis=1)
 
 		df_like = pd.merge(df_like, df_freq, on=string_cols+['sublex'])
 		df_like = df_like[df_like.frequency > 0]
@@ -47,6 +56,8 @@ if __name__ == "__main__":
 
 	for sublex, sub_df_like in df_like.groupby('sublex'):
 		sub_df_like = sub_df_like.sort_values('representativeness', ascending=False).head(args.top_k)
+		sub_df_like = sub_df_like.reset_index(drop=True)
+		sub_df_like.loc[:,'rank'] = sub_df_like.index + 1
 		substring_csv = sub_df_like[string_cols[0]].map(decoder)
 		for col in string_cols[1:]:
 			substring_csv = substring_csv + ',' + sub_df_like[col].map(decoder)

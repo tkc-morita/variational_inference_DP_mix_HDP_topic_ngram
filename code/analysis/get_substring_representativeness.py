@@ -43,7 +43,7 @@ if __name__ == "__main__":
 	string_cols = sorted([col for col in df_like.columns.tolist() if col.startswith('symbol_')])
 	for pos_col,symbol in zip(string_cols[::-1],conditioning_string_coded[::-1]):
 		sub_df_like = sub_df_like[sub_df_like[pos_col]==symbol]
-	log_like = np.ma.log(sub_df_like.groupby('sublex', sort=True).prob.sum().values)
+	log_like = np.log(sub_df_like.groupby('sublex', sort=True).prob.sum().values)
 
 	log_assignment_probs = parse_vi.get_log_sublex_assignment_probs(args.result_dir)
 	log_assignment_over_others = get_log_assignment_over_others(log_assignment_probs)
