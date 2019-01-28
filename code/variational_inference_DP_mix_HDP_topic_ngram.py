@@ -463,7 +463,7 @@ class HDPNgram(object):
 		for context_length, vpc in enumerate(self.varpar_concents[1:-1], start=1):
 			for context in set(fc[n-1-context_length:] for fc in full_contexts):
 				self.tree[context_length][context]\
-								= DP(
+								= DP_middle(
 									num_clusters,
 									self.tree[context_length-1][context[1:]],
 									context_length,
@@ -754,7 +754,7 @@ class DP_bottom(object):
 
 
 
-class DP(DP_bottom):
+class DP_middle(DP_bottom):
 	def __init__(self, num_clusters, mother, context_length, context, varpar_concent, num_sublex, hdp):
 		self.mother = mother
 		self.hdp=hdp
@@ -918,7 +918,7 @@ class DP(DP_bottom):
 
 
 	
-class DP_top(DP):
+class DP_top(DP_middle):
 	def __init__(self, num_clusters, context_length, context, varpar_concent, atom_base_counts, num_sublex, hdp):
 		self.hdp=hdp
 		self.context_length=context_length
