@@ -8,20 +8,20 @@ plt.rc('text', usetex=True)
 # plt.rc('font', family='serif')
 import argparse, os.path
 
-def heatmap(df_result, result_dir, row_group, col_group):
+def heatmap(df_result, result_dir, row_group, col_group, vmax = None, fmt='.2g'):
 	mat = get_matrix(df_result, row_group, col_group)
-	vmax = 3000
-	ax_hm = sns.heatmap(mat, cmap='binary', annot=True, fmt='d', vmax=vmax)
+	ax_hm = sns.heatmap(mat, cmap='binary', annot=True, fmt=fmt, vmax=vmax)
 	ax_hm.set_yticklabels(ax_hm.get_yticklabels(), rotation=0)
-	ax_cb = plt.gcf().axes[-1]
-	ax_cb.set_yticklabels(list(ax_cb.get_yticklabels()[:-1]) + ['$>{vmax}$'.format(vmax=vmax)])
+	if not vmax is None:
+		ax_cb = plt.gcf().axes[-1]
+		ax_cb.set_yticklabels(list(ax_cb.get_yticklabels()[:-1]) + ['$\geq{vmax}$'.format(vmax=vmax)])
 	plt.xlabel(col_group)
 	# plt.show()
 	plt.savefig(os.path.join(result_dir, 'heatmap.png'), bbox_inches='tight')
 
 
 def get_matrix(df_result, row_group, col_group):
-	return pd.pivot_table(df_result, values='cardinality', index=row_group, columns=col_group)
+	return pd.pivot_table(df_result, values='cardinality', index=row_group, columns=col_group, fill_value=0)
 
 def format_sublex_name(sublex_name):
 	return (r'\textsc{Sublex}\textsubscript{$\approx$%s}' % sublex_name)
@@ -58,5 +58,7 @@ if __name__=='__main__':
 		df_result,
 		result_dir,
 		'Etymological sublexicon',
-		'Predicted word categories'
+		'Predicted word categories',
+		vmax = 3000,
+		fmt='d'
 		)
