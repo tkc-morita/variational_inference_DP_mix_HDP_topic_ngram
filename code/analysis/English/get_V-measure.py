@@ -14,7 +14,8 @@ def get_V_measure(df):
 
 def get_correct_sublex(data_path):
 	df_data = pd.read_csv(data_path, sep='\t', encoding='utf-8')
-	origin2ix=dict([('AngloSaxon', 0), ('OldNorse', 0), (u'Dutch', 0), (u'Latin', 1), (u'French', 1), (u'LatinateOfGermanic', -1)])
+	df_data = df_data[~df_data.origin.isnull()]
+	origin2ix=dict([('AngloSaxon', 0), ('OldNorse', 0), (u'Dutch', 0), (u'Latin', 1), (u'French', 1), (u'LatinatesOfGermanic', -1)])
 	df_data['actual_sublex']=df_data.origin.map(origin2ix)
 	return df_data
 
@@ -24,7 +25,7 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('result_path', type=str, help='Path to the classification results.')
 	parser.add_argument('data_path', type=str, help='Path to the data, containing the grand truth classification info.')
-	parser.add_argument('-w', '--whole_data', action='store_true', help='Use the whole data rather than Native, SJ, Foreign alone.')
+	parser.add_argument('-w', '--whole_data', action='store_true', help='Use the whole data rather than Anglo-Saxon and Latin alone.')
 	args = parser.parse_args()
 
 
@@ -36,10 +37,10 @@ if __name__ == '__main__':
 	df['predicted_sublex'] = df_pred.most_probable_sublexicon.map(remove_circumfix)
 
 	if args.whole_data:
-		filename = 'v-measure_whole-data.txt'
+		filename = 'v-measure_whole-Wiki.txt'
 	else:
 		filename = 'v-measure_AngloSaxon-Latin.txt'
-		df = df[df.origin.isin(['AngloSazon','Latin'])]
+		df = df[df.origin.isin(['AngloSaxon','Latin'])]
 	df = df[df.actual_sublex!=-1]
 	
 	v_measure = get_V_measure(df)
