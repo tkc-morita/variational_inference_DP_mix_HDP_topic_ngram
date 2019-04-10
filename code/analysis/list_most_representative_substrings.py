@@ -17,7 +17,7 @@ def to_int_code(string, encoder):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('likelihood_csv', type=str, help='Path to the csv file containing likelihood info.')
-	parser.add_argument('result_dir', type=str, help='Path to the directory file containing learning results.')
+	parser.add_argument('result_dir', type=str, help='Path to the directory containing learning results.')
 	parser.add_argument('string_length', type=int, help='Length of substrings to rank.')
 	parser.add_argument('top_k', type=int, help='Length of the ranking.')
 	parser.add_argument('-f','--frequency_csv', type=str, default=None, help='Path to the csv file containing frequency info. If specified, the ranking will be limited to substrings with positive frequency in the file.')

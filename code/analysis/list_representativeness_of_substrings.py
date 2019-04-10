@@ -20,7 +20,7 @@ def reformat_symbols(symbol):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('likelihood_csv', type=str, help='Path to the csv file containing likelihood info.')
-	parser.add_argument('result_dir', type=str, help='Path to the directory file containing learning results.')
+	parser.add_argument('result_dir', type=str, help='Path to the directory containing learning results.')
 	parser.add_argument('frequency_csv', type=str, help='Path to the csv file containing frequency info.')
 	parser.add_argument('string_length', type=int, help='Length of substrings to rank.')
 	args = parser.parse_args()
