@@ -94,4 +94,4 @@ You'll get four files.
 
 ### References
 - [Morita, Takashi. 2018. Unspervised Learning of Lexical Subclasses from Phonotactics. Ph.D Thesis. Doctoral dissertation. MIT, Cambridge, MA.](https://dspace.mit.edu/bitstream/handle/1721.1/120612/1088558202-MIT.pdf?sequence=1)<a name="Morita_thesis"></a>
-- Morita, Takashi and Timothy J. under review. Statistical Evidence for learnable lexical subclasses in Japanese.<a name="MoritaODonnell_JP"></a>
+- Morita, Takashi and Timothy J. O'Donnell. under review. Statistical Evidence for learnable lexical subclasses in Japanese.<a name="MoritaODonnell_JP"></a>
