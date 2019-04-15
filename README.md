@@ -13,7 +13,7 @@ for details on the model.
 
 Python 3 is not supported.
 
-## Hot to Use?
+## Hot to Use It?
 
 1. Prepare your data.
 	- .tsv file
@@ -83,3 +83,15 @@ You'll get four files.
 	- Log of the update.
 	- The recorded "var_bound" (i.e. ELBO) doesn't include constant terms (for computational efficiency).
 	- To get the constant term, run `get_var_bound_constant.py`.
+
+
+
+## Data Analyzed So Far
+
+- Japanese words appearing in [BCCWJ](https://pj.ninjal.ac.jp/corpus_center/bccwj/data-files/frequency-list/BCCWJ_frequencylist_suw_ver1_0.zip) ([Morita, 2018](#Morita_thesis); [Morita & O'Donnell, under review](#MoritaODonnell_JP)).
+- English words in [CELEX](https://catalog.ldc.upenn.edu/LDC96L14) ([Morita, 2018](#Morita_thesis); Morita & O'Donnell, in prep.).
+- Tigrinya words collected by [Dr. Kevin Scannell](http://crubadan.org/languages/ti).
+
+### References
+- [Morita, Takashi. 2018. Unspervised Learning of Lexical Subclasses from Phonotactics. Ph.D Thesis. Doctoral dissertation. MIT, Cambridge, MA.](https://dspace.mit.edu/bitstream/handle/1721.1/120612/1088558202-MIT.pdf?sequence=1)<a name="Morita_thesis"></a>
+- Morita, Takashi and Timothy J. under review. Statistical Evidence for learnable lexical subclasses in Japanese.<a name="MoritaODonnell_JP"></a>

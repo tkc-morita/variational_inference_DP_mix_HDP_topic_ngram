@@ -1,14 +1,14 @@
 # coding: utf-8
 
 import pandas as pd
-import pandas2latex as p2l
-import pytablewriter, sys
+# import pandas2latex as p2l
+import argparse
 
 disc2latex = {
 	"g":r"{\textscriptg}",
 	"N":r"\textipa{N}",
 	"T":r"{\texttheta}",
-	"D":r"{\dh}",
+	"D":r"\textipa{D}",
 	"S":r"{\textesh}",
 	"Z":r"{\textyogh}",
 	"G":r"{\textgamma}",
@@ -52,7 +52,9 @@ disc2latex = {
 	"c":r"{\~{\ae}}",
 	"q":r"{\~{\textscripta}}{\textlengthmark}",
 	"0":r"{\~{\textscripta}}{\textlengthmark}",
-	"~":r"{\~{\textturnscripta}}{\textlengthmark}"
+	"~":r"{\~{\textturnscripta}}{\textlengthmark}",
+	"END":r"\texttt{END}",
+	"START":r"\texttt{START}"
 }
 
 def convert_context(context):
@@ -75,30 +77,45 @@ def disc2latex_func(disc):
 if __name__ == '__main__':
 	pd.set_option('display.max_colwidth', -1)
 
-	path = sys.argv[1]
-	df = pd.read_csv(path, encoding='utf-8')
+	parser = argparse.ArgumentParser()
+	parser.add_argument('table_path', type=str, help='Path to the table.')
+	parser.add_argument('save_path', type=str, help='Path to the tex file to save the table.')
+	parser.add_argument('--sublex_id', type=int, default=None, help='ID # of sublex. Used when the table_path does not include this info.')
+	args = parser.parse_args()
+
+	path = args.table_path
+	df = pd.read_csv(path, encoding='utf-8', sep='\t')
 
 	# For ngram rep/
-	sublex_id = int(path.split('sublex-')[1][0]) # int(sys.argv[2])
-	df.loc[:,'context'] = df.decoded_context.map(convert_context)
-	df.loc[:,'value'] = df.decoded_value.map(disc2latex_func)
-	representativeness_latex = r'$R(x_{\textrm{new}}, \mathbf{u},' + ' {sublex})$'.format(sublex=sublex_id)
-	df.loc[:,representativeness_latex] = df.representativeness
-	df.loc[:,'freq.'] = df.frequency
-	df = df[['context', 'value', representativeness_latex, 'freq.']]
+	# sublex_id = int(path.split('sublex-')[1][0]) # int(sys.argv[2])
+	# df.loc[:,'context'] = df.decoded_context.map(convert_context)
+	# df.loc[:,'value'] = df.decoded_value.map(disc2latex_func)
+	# representativeness_latex = r'$R(x_{\textrm{new}}, \mathbf{u},' + ' {sublex})$'.format(sublex=sublex_id)
+	# df.loc[:,representativeness_latex] = df.representativeness
+	# df.loc[:,'freq.'] = df.frequency
+	# df = df[['context', 'value', representativeness_latex, 'freq.']]
+
+	# For joint ngram rep
+	df.loc[:,'IPA'] = df.substring_csv.map(lambda string: ''.join([disc2latex_func(code) for code in string.split(',')]))
+	df.loc[:,'representativeness'] = df.representativeness.map(lambda value: '%0.6f' % value)
+	df = df[['rank','IPA','representativeness']]
+
 
 	# For probable words
-	# sublex_id = int(path.split('sublex-')[1][0]) # int(sys.argv[2])
-	# sublexes = ['sublex_%i' % k for k in range(6) if k!=sublex_id]
+	# # sublex_id = int(path.split('sublex-')[1][0]) # int(sys.argv[2])
+	# sublex_id = args.sublex_id
+	# # sublexes = ['sublex_%i' % k for k in range(6) if k!=sublex_id]
 	# df = df.rename(columns={'sublex_%i' % sublex_id:'prob'})
 	# df['prob'] = df.prob.map(lambda value: '%0.6f' % value)
 	# df.loc[:,'IPA'] = df.DISC.map(lambda string: ''.join([disc2latex_func(code) for code in string]))
+	# df = df[df.origin.isin(['Latin','French'])]
 
 	# df['rank'] = df.index + 1
 
-	# df['origin'] = df.origin.str.replace('&',r'\&').str.replace('_',' ').str.replace('|','/').str.replace('IMITATIVE',r'\textsc{imitative}').str.replace('SYMBOLIC',r'\textsc{symbolic}').str.replace('UNKNOWN',r'\textsc{unknown}').str.replace('NO',r'\textsc{unwritten}')
-	# df = df[['orthography','IPA','origin','prob']]
-	# df = df[['orthography','IPA','prob']]
+	# # df['origin'] = df.origin.str.replace('&',r'\&').str.replace('_',' ').str.replace('|','/').str.replace('IMITATIVE',r'\textsc{imitative}').str.replace('SYMBOLIC',r'\textsc{symbolic}').str.replace('UNKNOWN',r'\textsc{unknown}').str.replace('NO',r'\textsc{unwritten}')
+	# # df = df[['orthography','IPA','origin','prob']]
+	# # df = df[['orthography','IPA','prob']]
+	# df = df[['lemma','IPA','origin','prob']]
 
 	# df = df[['rank','orthography','IPA','prob']]
 
@@ -114,5 +131,5 @@ if __name__ == '__main__':
 	# latex_table = latex_table.replace(r'ability',r'{\color[rgb]{0.999996,0.999939,0.041033}ability}').replace(r'{\textschwa}b{\textsci}l{\textschwa}t{\textsci}',r'{\color[rgb]{0.999996,0.999939,0.041033}{\textschwa}b{\textsci}l{\textschwa}t{\textsci}}')
 	# latex_table = latex_table.replace(r'ibility',r'{\color[rgb]{0.999996,0.999939,0.041033}ibility}')
 
-	with open(sys.argv[2], 'w') as f:
+	with open(args.save_path, 'w') as f:
 		f.write(latex_table)
