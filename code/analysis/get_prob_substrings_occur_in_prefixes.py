@@ -87,12 +87,12 @@ if __name__ == "__main__":
 	
 	ngram_array = get_ngram_trans_array(df_ngram)
 
-	joint_probs_of_n_minus_1_grams = get_prob_substring_occur_in_prefixes(ngram_array, args.max_length)
+	joint_probs_of_n_grams = get_prob_substring_occur_in_prefixes(ngram_array, args.max_length)
 
-	n = joint_probs_of_n_minus_1_grams.ndim
+	n = joint_probs_of_n_grams.ndim-1
 	index = pd.MultiIndex.from_product(
-				[range(s) for s in joint_probs_of_n_minus_1_grams.shape],
-				names=['symbol_{pos}'.format(pos=pos) for pos in range(n-1)]+['sublex']
+				[range(s) for s in joint_probs_of_n_grams.shape],
+				names=['symbol_{pos}'.format(pos=pos) for pos in range(n)]+['sublex']
 				)
-	df_result = pd.DataFrame(joint_probs_of_n_minus_1_grams.reshape(-1,1), columns=['prob'], index=index).reset_index()
+	df_result = pd.DataFrame(joint_probs_of_n_grams.reshape(-1,1), columns=['prob'], index=index).reset_index()
 	df_result.to_csv(args.save_path, index=False, encoding='utf-8')
