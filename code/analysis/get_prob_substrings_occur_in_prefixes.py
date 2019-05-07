@@ -30,7 +30,7 @@ def get_prob_substring_occur_in_prefixes(ngram_array, max_length):
 
 	prob_absent = 1.0 - prob_after_k_trans
 
-	for k in range(2,max_length+1):
+	for k in range(n-1,max_length+1):
 		marg_over_oldest_trans = np.sum(prob_after_k_trans,axis=0)
 		prob_after_k_trans = (
 						marg_over_oldest_trans.reshape(
