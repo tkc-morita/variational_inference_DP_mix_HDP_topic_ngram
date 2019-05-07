@@ -79,7 +79,7 @@ def get_init_contexts(n, vocab_size):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('ngram_path', type=str, help='Path to the csv file containing ngram prob. info.')
-	parser.add_argument('max_length', type=int, help='Maximum length of the prefixes to (n-1)-gram substrings whose marginalization would approximate the prob. of the (n-1)-ngrams.')
+	parser.add_argument('max_length', type=int, help='Maximum length of the prefixes + n-gram substrings whose marginalization would approximate the joint prob. of the ngrams.')
 	parser.add_argument('save_path', type=str, help='Path to the csv file to save results.')
 	args = parser.parse_args()
 
