@@ -1,18 +1,28 @@
 # coding: utf-8
 
 import pandas as pd
-import sys, os
+import argparse
 import scipy.stats as sps
 # import my_autopct
 
 
 
 if __name__=='__main__':
-	data_path = sys.argv[1]
+	parser = argparse.ArgumentParser()
+	parser.add_argument('data_path', type=str, help='Path to the tsv file containing full data classified.')
+	args = parser.parse_args()
 
-	df = pd.read_csv(data_path, sep='\t', encoding='utf-8')
+	df = pd.read_csv(args.data_path, sep='\t', encoding='utf-8')
 
-	df = df[~pd.isnull(df).any(axis=1)]
+	print('Excluded:')
+	print(df[df.most_probable_sublexicon.isnull()])
+
+	print('Mixed:')
+	print(df[df.MyEtym=='MIXED'])
+
+	df = df[~df.most_probable_sublexicon.isnull()]
+	df = df[df.MyEtym.isin(['Latin','non_Latin'])]
+	print(df.MyEtym.value_counts())
 	
 	# linguistic_work = 'Levin1993_Latin'
 	# linguistic_work = 'YangMontrul2017_Latin'

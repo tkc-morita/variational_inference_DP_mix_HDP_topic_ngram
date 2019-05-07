@@ -1,38 +1,33 @@
 # coding: utf-8
 
-import numpy as np
 import pandas as pd
-# import scipy.misc as spm
-import os, sys
-import posterior_predictive_inferences as ppi
-import encode_decode as edcode
-
-
-
-
+import os.path, argparse
 
 
 if __name__=='__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('assignment_path', type=str, help='Path to the csv file containing classification info.')
+	parser.add_argument('data_path', type=str, help='Path to the tsv file containing full data classified.')
+	parser.add_argument('--subdata', type=str, default=None, help='Path to a file containing subdata to be output.')
+	parser.add_argument('--sep', type=str, default='\t', help='Separator of the subdata file. tab stop by default (i.e., tsv).')
+	args = parser.parse_args()
 
-	assignment_path = sys.argv[1]
 
-	df_assign = pd.read_csv(assignment_path)
+	df_assign = pd.read_csv(args.assignment_path)
 
-	data_path = sys.argv[2]
-	df_data = pd.read_csv(data_path, encoding='utf-8', sep='\t')
+	df_data = pd.read_csv(args.data_path, encoding='utf-8', sep='\t')
 
-	df_assign.loc[:,'orthography'] = df_data.lemma
+	df_assign.loc[:,'lemma'] = df_data.lemma
 	df_assign.loc[:,'DISC'] = df_data.DISC
 
-	lemma_path = sys.argv[3]
-	df_lemma = pd.read_csv(lemma_path, encoding='utf-8', sep='\t')
+	if args.subdata is None:
+		datafile_name = os.path.splitext(os.path.basename(args.data_path))[0]
+	else:
+		df_subdata = pd.read_csv(args.subdata, encoding='utf-8', sep=args.sep)
+		df_assign = pd.merge(df_subdata, df_assign, how='left', on='lemma')
+		df_assign = df_assign.drop(columns='customer_id').drop_duplicates()
+		datafile_name = os.path.splitext(os.path.basename(args.subdata))[0]
 
-
-	df_lemma = pd.merge(df_lemma, df_assign, how='left', on='orthography')
-	df_lemma = df_lemma.drop(columns='customer_id').drop_duplicates()
-
-
-	result_dir = os.path.split(assignment_path)[0]
-	datafile_root = os.path.splitext(os.path.split(lemma_path)[1])[0]
-	classification_filename = datafile_root+'_posterior-classification.tsv'
-	df_lemma.to_csv(os.path.join(result_dir, classification_filename), index=False, encoding = 'utf-8', sep='\t')
+	result_dir = os.path.dirname(args.assignment_path)
+	classification_filename = datafile_name+'_posterior-classification.tsv'
+	df_assign.to_csv(os.path.join(result_dir, classification_filename), index=False, encoding = 'utf-8', sep='\t')
