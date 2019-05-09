@@ -7,19 +7,19 @@ This program approximates them by marginalizing over all the prefixes up to some
 
 import numpy as np
 import pandas as pd
-import itertools, argparse, sys, os.path
+import argparse, sys, os.path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import get_prob_substrings_occur_in_prefixes, encode_decode, get_substring_representativeness, parse_vi
 
 
 
-def mask_VC_transitions(ngram_array, coded_vowels, coded_consonants):
-	for v,c in itertools.product(coded_vowels, coded_consonants):
-		ngram_array[...,v,c] = 0.0
+def mask_VX_transitions(ngram_array, coded_vowels):
+	for v in coded_vowels:
+		ngram_array[...,v,:,:] = 0.0
 	return ngram_array
 
-VOWELS_IN_DISC = list('IE{VQU@i#$u312456789cqO~')
-CONSONANTS_IN_DISC = list('pbtdkgNmnlrfvTDszSZjxhwJ_CFHPR')
+VOWELS_IN_DISC = list('IE{VQU@i#$u312456789cq0~')
+# CONSONANTS_IN_DISC = list('pbtdkgNmnlrfvTDszSZjxhwJ_CFHPR')
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -36,9 +36,9 @@ if __name__ == "__main__":
 	df_code = pd.read_csv(args.code_path, encoding='utf-8')
 	encoder, decoder = encode_decode.df2coder(df_code)
 	coded_vowels = [encoder[v] for v in VOWELS_IN_DISC]
-	coded_consonants = [decoder[c] for c in CONSONANTS_IN_DISC]
+	# coded_consonants = [encoder[c] for c in CONSONANTS_IN_DISC]
 
-	ngram_array = mask_VC_transitions(ngram_array, coded_vowels, coded_consonants)
+	ngram_array = mask_VX_transitions(ngram_array, coded_vowels)
 
 
 	joint_probs_of_n_grams = get_prob_substrings_occur_in_prefixes.get_prob_substring_occur_in_prefixes(ngram_array, args.max_CC_length+1)

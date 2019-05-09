@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import pandas2latex_CELEX as p2l
-import pytablewriter, sys
+import sys
 
 
 def formatter_counts(x):
@@ -9,6 +9,15 @@ def formatter_counts(x):
 
 def formatter_percent(x):
 	return (r'%.2f\%%' % x)
+
+def format_sublex_name(sublex_name):
+	return (r'\textsc{Sublex}\textsubscript{$\approx$%s}' % sublex_name)
+	# return (r'\textsc{Sublex}\textsubscript{%s}' % sublex_name)
+
+def rename_sublex(sublex_name):
+	ix = int(sublex_name)
+	ix2name = {0:'-ability', 2:'Latinate', 5:'Germanic'}
+	return ix2name[ix]
 
 
 if __name__ == '__main__':
@@ -19,36 +28,24 @@ if __name__ == '__main__':
 
 	# df.loc[:,'value'] = df.value.map(p2l.disc2latex_func)
 
-	df_formatted = pd.pivot_table(df, values='expected_frequency', index='value', columns = 'sublex_id')
+	df = df[df.sublex.isin([2,5])]
+	# df_formatted.loc[:,'sublex'] = df.sublex.map(rename_sublex).map(format_sublex_name)
+	df_formatted = pd.pivot_table(df, values='representativeness', index='vowel', columns = 'sublex')
 
-	frequency = df.groupby(['value']).expected_frequency.sum()
-	df_formatted['total'] = frequency.map(np.round)
 
 
-	for col in df_formatted.columns:
-		if isinstance(col, int):
-			df_formatted.loc[:,str(col)+'_percent'] = df_formatted.loc[:,col] / df_formatted.total * 100
-
-	df_formatted = df_formatted.sort_values('5_percent', ascending=False)
-
-	df_formatted = df_formatted.loc[:,[
-								'total',
-								0,
-								'0_percent',
-								2,
-								'2_percent',
-								5,
-								'5_percent'
-							]]
+	df_formatted = df_formatted.sort_values(2, ascending=False)
 
 	df_formatted = df_formatted.set_index(df_formatted.index.map(p2l.disc2latex_func))
+
+	df_formatted = df_formatted.rename(columns={ix:format_sublex_name(rename_sublex(ix)) for ix in [2,5]})
 	
 	latex_table = df_formatted.to_latex(
 					encoding='utf-8',
 					escape = False,
 					longtable = False,
 					# index = False,
-					formatters = [lambda x: '%i' % x, formatter_counts, formatter_percent, formatter_counts, formatter_percent, formatter_counts, formatter_percent]
+					# formatters = [lambda x: '%i' % x, formatter_counts, formatter_percent, formatter_counts, formatter_percent, formatter_counts, formatter_percent]
 					)
 	with open(sys.argv[2], 'w') as f:
 		f.write(latex_table)

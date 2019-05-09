@@ -51,7 +51,7 @@ disc2latex = {
 	"@":r"{\textschwa}",
 	"c":r"{\~{\ae}}",
 	"q":r"{\~{\textscripta}}{\textlengthmark}",
-	"0":r"{\~{\textscripta}}{\textlengthmark}",
+	"0":r"{\~{\ae}}{\textlengthmark}",
 	"~":r"{\~{\textturnscripta}}{\textlengthmark}",
 	"END":r"\texttt{END}",
 	"START":r"\texttt{START}"
