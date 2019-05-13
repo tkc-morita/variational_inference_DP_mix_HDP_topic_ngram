@@ -15,7 +15,7 @@ def format_sublex_name(sublex_name):
 
 def rename_sublex(sublex_name):
 	ix = int(sublex_name.split('_')[1])
-	ix2name = {0:'-ability', 2:'Latinate', 5:'Germanic'}
+	ix2name = {0:'-ity', 2:'Latinate', 5:'Germanic'}
 	return ix2name[ix]
 	# return ix
 

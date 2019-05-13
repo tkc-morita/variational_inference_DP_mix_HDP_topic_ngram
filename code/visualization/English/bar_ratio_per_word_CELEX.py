@@ -14,7 +14,7 @@ def stacked_barplot(df, result_dir):
 
 	df_summed = df.set_index('lemma').loc[:,sublex_ids].rename(columns={col:format_sublex_name(col) for col in df.columns.tolist() if col.startswith('sublex_')})
 	# print(df_summed.shape[0])
-	df_summed = df_summed.iloc[35:,:] #df_summed.head(n = df_summed.shape[0] / 3)
+	# df_summed = df_summed.iloc[:35,:] #df_summed.head(n = df_summed.shape[0] / 3)
 	print(df_summed.shape[0])
 	fig = plt.figure(figsize = (8.0, df_summed.shape[0] / 3.0))
 	# fig = plt.figure(figsize = (4.0, 19 / 3.0))
@@ -22,6 +22,7 @@ def stacked_barplot(df, result_dir):
 	df_summed.plot.barh(stacked=True, ax=ax)
 	plt.gca().invert_yaxis()
 	ax.axvline(x=0.5, color = 'gray', linestyle='--')
+	ax.set_xlim((0,1))
 	plt.title("Posterior probability of dative verbs' classification.")
 	plt.xlabel('Classification probability')
 	plt.ylabel('Word')
@@ -33,16 +34,16 @@ def stacked_barplot(df, result_dir):
 	# legend.remove()
 	plt.tight_layout()
 	# plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_grammatical_whole.png'), bbox_inches='tight')
-	# plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_ungrammatical_whole.png'), bbox_inches='tight')
+	plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_ungrammatical_whole.png'), bbox_inches='tight')
 	# plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_grammatical_2.png'), bbox_inches='tight')
-	plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_2.png'), bbox_inches='tight')
+	# plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_1.png'), bbox_inches='tight')
 	# plt.savefig(os.path.join(result_dir,'FOR-PRESENTATION_bar_per-word_Latin_grammatical_2.png'), bbox_inches='tight')
 	# plt.show()
 	# plt.gcf().clear()
 	
 def format_sublex_name(original):
 	ix = int(original.split('_')[-1])
-	ix2new_name = {0:'-ability',2:'Latinate',5:'Germanic'}
+	ix2new_name = {0:'-ity',2:'Latinate',5:'Germanic'}
 	if ix in ix2new_name:
 		return r'\textsc{Sublex}\textsubscript{$\approx$' + ix2new_name[ix] + r'}'
 	else:
@@ -56,9 +57,9 @@ if __name__=='__main__':
 	df = df[~df.most_probable_sublexicon.isnull()]
 	
 	# df = df[df.double_object == 'grammatical']
-	# df = df[df.double_object != 'grammatical']
-	# df = df[df.MyEtym == 'Latin']
-	df = df[df.MyEtym == 'non_Latin']
+	df = df[df.double_object != 'grammatical']
+	df = df[df.MyEtym == 'Latin']
+	# df = df[df.MyEtym == 'non_Latin']
 	# print(df)
 	df = df.sort_values('lemma')
 

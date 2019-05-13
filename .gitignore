@@ -8,3 +8,4 @@ results*
 *.pyc
 .DS_Store
 .vscode
+.python-version

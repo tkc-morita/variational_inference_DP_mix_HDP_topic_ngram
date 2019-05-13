@@ -37,7 +37,7 @@ def bar(result_path):
 		x,y = p.get_xy()
 		width_ratio = width/float(map_counts.sum())
 		if width_ratio>0.2:
-			ax.annotate('{width} ({percent:.1f}'.format(width=width, percent=(100.0*width_ratio)) + r'\%)', (x+width_ratio*width*0.5, y+.5*height))
+			ax.annotate('{width} ({percent:.1f}'.format(width=width, percent=(100.0*width_ratio)) + r'\%)', (x+width*.5, y+.5*height), horizontalalignment='center', verticalalignment='center',)
 	# map_counts.reset_index().melt(value_vars=['most_probable_sublexicon'], var_name='MAP categories', value_name='Counts').plot.barh(stacked=True)
 	# plt.ylabel('')
 	ax.set_yticklabels([''])
@@ -53,7 +53,7 @@ def to_tab10(x):
 
 def format_sublex_name(original):
 	ix = int(original.split('_')[-1])
-	ix2new_name = {0:'-ability',2:'Latinate',5:'Germanic'}
+	ix2new_name = {0:'-ity',2:'Latinate',5:'Germanic'}
 	if ix in ix2new_name:
 		return r'\textsc{Sublex}\textsubscript{$\approx$' + ix2new_name[ix] + r'}'
 	else:
