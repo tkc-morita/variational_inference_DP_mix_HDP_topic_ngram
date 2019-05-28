@@ -160,7 +160,7 @@ class VariationalInference(object):
 												for sublex_id
 												in xrange(self.num_clusters)
 												]
-				df_concent = df_concent.append(df_concent_sub, ignore_index=True)
+				df_concent = df_concent.append(df_concent_sub, ignore_index=True, sort=True)
 				for context,rst in level.iteritems():
 					coded_context = '_'.join(map(str,context))#.encode('utf-8')
 
@@ -261,7 +261,7 @@ class VariationalInference(object):
 										]]
 										,
 										columns=['rate', 'shape', 'DP_name']
-									)
+									), ignore_index=True, sort=True
 								)
 
 			hdf5_store.put(
