@@ -18,7 +18,8 @@ Python 3 is not supported.
 1. Prepare your data.
 	- .tsv file
 	- Data column should have strings of comma-separated symbols (e.g. a,b,c for the string "abc").
-2. Move to the `code` directory.
+	- Example data available at [toy_data/DP-ngram-mixture_simulated_data_200-samples.tsv](toy_data/DP-ngram-mixture_simulated_data_200-samples.tsv).
+2. Move to the `code/` directory.
 2. Run the following:
 ```bash
 python learning.py PATH/TO/YOUR/DATA
