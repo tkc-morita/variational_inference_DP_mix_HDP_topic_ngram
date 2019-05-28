@@ -172,38 +172,11 @@ class VariationalInference(object):
 										,
 										columns=["p"]
 										)
-						df_assignment['children_DP_context']=children_contexts.iloc[
-																np.repeat(
-																	np.arange(rst.varpar_assignment.shape[0])
-																	,
-																	np.prod(
-																		rst.varpar_assignment.shape[1:]
-																		)
-																	)
-																].reset_index(drop=True)
-						df_assignment['sublex_id'] = np.tile(
-														np.repeat(
-															np.arange(rst.varpar_assignment.shape[1])
-															,
-															np.prod(rst.varpar_assignment.shape[2:])
-															)
-														,
-														rst.varpar_assignment.shape[0]
-														)
-						df_assignment['children_cluster_id']=np.tile(
-																np.repeat(
-																	np.arange(rst.varpar_assignment.shape[2])
-																	,
-																	rst.varpar_assignment.shape[3]
-																	)
-																,
-																np.prod(rst.varpar_assignment.shape[:2])
-																)
-						df_assignment['cluster_id']=np.tile(
-														np.arange(rst.varpar_assignment.shape[3])
-														,
-														np.prod(rst.varpar_assignment.shape[:-1])
-													)
+						children_dp_context_ids, sublex_ids, children_cluster_ids, cluster_ids = np.indices(rst.varpar_assignment.shape)
+						df_assignment['children_DP_context']=children_contexts.iloc[children_dp_context_ids.flatten()].reset_index(drop=True)
+						df_assignment['sublex_id'] = sublex_ids.flatten()
+						df_assignment['children_cluster_id'] = children_cluster_ids.flatten()
+						df_assignment['cluster_id'] = cluster_ids.flatten()
 						hdf5_store.put(
 							("sublex/_%igram/context_%s/assignment"
 							% (context_length+1,coded_context))
@@ -222,8 +195,9 @@ class VariationalInference(object):
 											),
 											columns=('beta_par1','beta_par2')
 											)
-					df_stick['sublex_id'] = np.repeat(np.arange(num_sublex), num_clusters)
-					df_stick['cluster_id'] = np.tile(np.arange(num_clusters), num_sublex)
+					sublex_ids, cluster_ids = np.indices(rst.varpar_stick.shape[:-1])
+					df_stick['sublex_id'] = sublex_ids.flatten()
+					df_stick['cluster_id'] = cluster_ids.flatten()
 					hdf5_store.put(
 						("sublex/_%igram/context_%s/stick"
 						% (context_length+1,coded_context))
@@ -240,27 +214,11 @@ class VariationalInference(object):
 						self.hdp_ngram.tree[0][()].varpar_atom.flatten()[:,np.newaxis],
 						columns=['dirichlet_par']
 						)
-			num_sublex,num_clusters,num_symbols = self.hdp_ngram.tree[0][()].varpar_atom.shape
-			df_atom['sublex_id']=np.repeat(
-										np.arange(num_sublex)
-										,
-										num_clusters*num_symbols
-									)
-			df_atom['cluster_id'] = np.tile(
-											np.repeat(
-												np.arange(num_clusters),
-												num_symbols
-											)
-											,
-											num_sublex
-										)
-			df_atom['value']=pd.Series(
-								np.tile(
-									np.arange(num_symbols)
-									,
-									num_sublex*num_clusters
-								)
-								)
+			sublex_ids, cluster_ids, value_ids = np.indices(self.hdp_ngram.tree[0][()].varpar_atom.shape)
+
+			df_atom['sublex_id'] = sublex_ids.flatten()
+			df_atom['cluster_id'] = cluster_ids.flatten()
+			df_atom['value'] = value_ids.flatten()
 			
 			hdf5_store.put(
 							'sublex/_1gram/context_/atom'
