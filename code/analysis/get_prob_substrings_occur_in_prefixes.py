@@ -15,7 +15,6 @@ def get_prob_substring_occur_in_prefixes(ngram_array, max_length):
 	Probs. of longer substrings a_1,...,a_n,a_{n+1},... can be computed later by further multiplying trigram probs.
 	"""
 	n = ngram_array.ndim - 1
-	assert max_length > n - 1, 'Too short max_length={max_length}'.format(max_length=max_length)
 
 	start_code = ngram_array.shape[-2] - 1
 	
@@ -30,7 +29,7 @@ def get_prob_substring_occur_in_prefixes(ngram_array, max_length):
 
 	prob_absent = 1.0 - prob_after_k_trans
 
-	for k in range(n-1,max_length+1):
+	for k in range(2,max_length+1):
 		marg_over_oldest_trans = np.sum(prob_after_k_trans,axis=0)
 		prob_after_k_trans = (
 						marg_over_oldest_trans.reshape(
