@@ -96,7 +96,7 @@ if __name__ == '__main__':
 	# df = df[['context', 'value', representativeness_latex, 'freq.']]
 
 	# For joint ngram rep
-	df.loc[:,'IPA'] = df.substring_csv.map(lambda string: ''.join([disc2latex_func(code) for code in string.split(',')]))
+	df.loc[:,'IPA'] = df.substring_csv.map(lambda string: ','.join([disc2latex_func(code) for code in string.split(',')]))
 	df.loc[:,'representativeness'] = df.representativeness.map(lambda value: '%0.6f' % value)
 	df = df[['rank','IPA','representativeness']]
 
