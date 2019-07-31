@@ -20,6 +20,7 @@ if __name__=='__main__':
 	parser.add_argument("-k", "--data_column", type=str, help="Column name for the inputs.", default='IPA_csv')
 	parser.add_argument("-S", "--shape_of_sublex_concentration", type=np.float64, help="Shape parameter of the Gamma prior on the concentration of the sublexicon DP.", default=10.0)
 	parser.add_argument("-R", "--rate_of_sublex_concentration", type=np.float64, help="Rate (= inverse of scale) parameter of the Gamma prior on the concentration of the sublexicon DP.", default=10.0)
+	parser.add_argument("--max_segment_clusters", type=int, default=None, help="Variational upper bound on # of segment clusters (tables). = 2*(num_symbols+2) by default")
 
 
 	options=vars(parser.parse_args())
@@ -57,7 +58,11 @@ if __name__=='__main__':
 	num_sublex = options['sublex']
 	n = options['ngram']
 	assert n > 1, "Only 2 and longer grams are supported."
-	max_segment_clusters = len(decoder)*2
+
+	if options['max_segment_clusters'] is None:
+		max_segment_clusters = len(decoder)*2
+	else:
+		max_segment_clusters = options['max_segment_clusters']
 
 	vi = vin.VariationalInference(
 			num_sublex,
