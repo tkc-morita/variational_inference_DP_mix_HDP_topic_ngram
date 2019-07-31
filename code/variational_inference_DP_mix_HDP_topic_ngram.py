@@ -100,6 +100,7 @@ class VariationalInference(object):
 		self.result_path = result_path 
 		logger.info('Initialization complete.')
 
+		logger.info('The constant term (={}) of the variational bound (i.e. ELBO) is omitted. Please manually add it to the reported bound if necessary.'.format(str(self.get_var_constant())))
 
 		
 	
