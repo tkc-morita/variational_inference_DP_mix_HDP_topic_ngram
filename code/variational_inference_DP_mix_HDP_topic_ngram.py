@@ -32,7 +32,7 @@ class VariationalInference(object):
 			num_sublex,
 			data,
 			n,
-			T_base,
+			max_segment_clusters,
 			concent_priors,
 			dirichlet_concentration,
 			result_path,
@@ -86,12 +86,12 @@ class VariationalInference(object):
 								for ngram in word.ngrams
 								])
 
-		self.hdp_ngram = HDPNgram(T_base, n, concent_priors, dirichlet_base_counts, full_contexts, num_sublex, self.data, self)
+		self.hdp_ngram = HDPNgram(max_segment_clusters, n, concent_priors, dirichlet_base_counts, full_contexts, num_sublex, self.data, self)
 		
 		self.hdp_ngram.set_varpar_assignment()
 		self._update_word_E_log_likelihood()
 		
-		logger.info('# of tables: %i' % T_base)
+		logger.info('Upper bound on # of segment clusters: %i' % max_segment_clusters)
 		logger.info('Gamma priors on concent_priorsration: (%f,%f)'
 							% (concent_priors[0],concent_priors[1]**-1)
 							)

@@ -14,7 +14,7 @@ def stacked_barplot(df, result_dir):
 
 	df_summed = df.set_index('lemma').loc[:,sublex_ids].rename(columns={col:format_sublex_name(col) for col in df.columns.tolist() if col.startswith('sublex_')})
 	# print(df_summed.shape[0])
-	# df_summed = df_summed.iloc[:35,:] #df_summed.head(n = df_summed.shape[0] / 3)
+	df_summed = df_summed.iloc[:35,:] #df_summed.head(n = df_summed.shape[0] / 3)
 	print(df_summed.shape[0])
 	fig = plt.figure(figsize = (8.0, df_summed.shape[0] / 3.0))
 	# fig = plt.figure(figsize = (4.0, 19 / 3.0))
@@ -34,9 +34,9 @@ def stacked_barplot(df, result_dir):
 	# legend.remove()
 	plt.tight_layout()
 	# plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_grammatical_whole.png'), bbox_inches='tight')
-	plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_ungrammatical_whole.png'), bbox_inches='tight')
+	# plt.savefig(os.path.join(result_dir,'bar_per-word_Latin_ungrammatical_whole.png'), bbox_inches='tight')
 	# plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_grammatical_2.png'), bbox_inches='tight')
-	# plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_1.png'), bbox_inches='tight')
+	plt.savefig(os.path.join(result_dir,'bar_per-word_non-Latin_2.png'), bbox_inches='tight')
 	# plt.savefig(os.path.join(result_dir,'FOR-PRESENTATION_bar_per-word_Latin_grammatical_2.png'), bbox_inches='tight')
 	# plt.show()
 	# plt.gcf().clear()
@@ -57,9 +57,9 @@ if __name__=='__main__':
 	df = df[~df.most_probable_sublexicon.isnull()]
 	
 	# df = df[df.double_object == 'grammatical']
-	df = df[df.double_object != 'grammatical']
-	df = df[df.MyEtym == 'Latin']
-	# df = df[df.MyEtym == 'non_Latin']
+	# df = df[df.double_object != 'grammatical']
+	# df = df[df.MyEtym == 'Latin']
+	df = df[df.MyEtym == 'non_Latin']
 	# print(df)
 	df = df.sort_values('lemma')
 

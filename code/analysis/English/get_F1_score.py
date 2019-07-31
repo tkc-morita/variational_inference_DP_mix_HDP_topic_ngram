@@ -121,6 +121,32 @@ def get_f_and_v_scores(df):
 		df.is_Latin.astype(int)
 	)
 
+	f_results["vs_GandP"] = {
+		"gram_as_pos":{},
+		"ungram_as_pos":{}
+	}
+	precision, recall, f = get_f_score(
+		df.is_grammatical.astype(int),
+		(~df.subject2GrimshawPrinceConstraint).astype(int)
+		)
+	f_results["vs_GandP"]["gram_as_pos"]["precision"] = precision
+	f_results["vs_GandP"]["gram_as_pos"]["recall"] = recall
+	f_results["vs_GandP"]["gram_as_pos"]["f"] = f
+
+
+	precision, recall, f = get_f_score(
+		(~df.is_grammatical).astype(int),
+		df.subject2GrimshawPrinceConstraint.astype(int)
+	)
+	f_results["vs_GandP"]["ungram_as_pos"]["precision"] = precision
+	f_results["vs_GandP"]["ungram_as_pos"]["recall"] = recall
+	f_results["vs_GandP"]["ungram_as_pos"]["f"] = f
+
+	v_results["vs_GandP"] = skm.v_measure_score(
+		df.is_grammatical.astype(int),
+		df.subject2GrimshawPrinceConstraint.astype(int)
+	)
+
 	return f_results, v_results
 
 def get_f_score(grand_truth, predictions):

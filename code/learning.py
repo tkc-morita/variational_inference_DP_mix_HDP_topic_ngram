@@ -57,13 +57,13 @@ if __name__=='__main__':
 	num_sublex = options['sublex']
 	n = options['ngram']
 	assert n > 1, "Only 2 and longer grams are supported."
-	base_num_clusters = len(decoder)*2
+	max_segment_clusters = len(decoder)*2
 
 	vi = vin.VariationalInference(
 			num_sublex,
 			data,
 			n,
-			base_num_clusters,
+			max_segment_clusters,
 			concent_priors,
 			topic_base_counts,
 			tmp_result_path
