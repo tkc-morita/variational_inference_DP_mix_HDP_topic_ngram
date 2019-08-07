@@ -3,9 +3,6 @@
 import pandas as pd
 import argparse, os.path
 
-def reformat_category(category):
-	after,before = category.split('|')
-	return before.rstrip('.') + '>' + after
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -22,11 +19,10 @@ if __name__ == "__main__":
 	df_data['map_sublex_suffixed'] = df_class.most_probable_sublexicon
 
 	df_suffixed = df_data[df_data.affix.fillna('').str.startswith('-')]
-	df_suffixed.loc[:,'suffix'] = df_suffixed.affix + ' (' + df_suffixed.affix_category.map(reformat_category) + ')'
 	if not args.top_k is None:
-		frequent_suffixes = df_suffixed.suffix.value_counts().index[:args.top_k]
+		frequent_suffixes = df_suffixed.affix.value_counts().index[:args.top_k]
 		print(frequent_suffixes)
-		df_suffixed  = df_suffixed[df_suffixed.suffix.isin(frequent_suffixes)]
+		df_suffixed  = df_suffixed[df_suffixed.affix.isin(frequent_suffixes)]
 	df_suffixed = pd.merge(df_suffixed.rename(columns={'Head':'lemma'}), df_data.loc[:,['Head','category','map_sublex_suffixed']].rename(columns={'map_sublex_suffixed':'map_sublex_base'}), how='left', left_on=['base','base_category'], right_on=['Head','category'])
 	df_suffixed = df_suffixed.drop_duplicates(subset=['IdNum','map_sublex_base'])
 	print('Disagreement in base category:')
