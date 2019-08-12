@@ -24,13 +24,13 @@ def bar(df_data, df_origin, result_dir, normalize=True, multinom_ps=None, all_su
 
 	# Suffix loop
 	df_suffixed = pd.DataFrame(columns = sublex_ids)
-	for suffix,sub_df in df_data.groupby('affix'):
+	for suffix,sub_df in df_data.groupby('last_suffix'):
 		df_suffixed.loc[suffix,sublex_ids] = sub_df.map_sublex_base.value_counts(normalize=normalize).reindex(sublex_ids, fill_value=0)
 		df_suffixed.loc[suffix,'count'] = sub_df.shape[0]
 
 	df_origin = df_origin.set_index('suffix')
 	df_suffixed = pd.merge(df_suffixed, df_origin.loc[:,['MyOrigin']].rename(columns={'MyOrigin':'origin'}), how='left', left_index=True, right_index=True)
-	df_suffixed['origin'] = pd.Categorical(df_suffixed.origin, categories=['Germanic','Umbiguous','Latinate'], ordered=True)
+	df_suffixed['origin'] = pd.Categorical(df_suffixed.origin, categories=['Germanic','?','Latinate'], ordered=True)
 	df_suffixed = df_suffixed.sort_values(['origin','count'], ascending=[True,False])
 	df_suffixed = df_suffixed.drop(columns='count')
 	df_suffixed = df_suffixed[sorted([col for col in df_suffixed.columns.tolist() if col.startswith('sublex_')])+['origin']]
@@ -64,8 +64,11 @@ def bar(df_data, df_origin, result_dir, normalize=True, multinom_ps=None, all_su
 		# for sublex_ix in sorted(sublex_ids):
 		# 	cum_p += multinom_ps[int(sublex_ix.split('_')[-1])]
 		# 	ax.axvline(x=cum_p, color = 'gray', linestyle='--')
+		new_labels = []
 		for y,ytl_txt in zip(ax.get_yticks(),ax.get_yticklabels()):
-			sub_df_originx = df_data[df_data.affix==ytl_txt.get_text()]
+			suffix = ytl_txt.get_text()
+			sub_df_originx = df_data[df_data.last_suffix==suffix]
+			new_labels.append(suffix.replace('B','Adv').replace('_>',r'$\to$'))
 			# N = sub_df_originx.shape[0]
 			counts = sub_df_originx.map_sublex_base.value_counts().reindex(full_sublex_ids, fill_value=0).tolist()
 			counts_r = rpy2.robjects.IntVector(counts)
@@ -84,13 +87,15 @@ def bar(df_data, df_origin, result_dir, normalize=True, multinom_ps=None, all_su
 				ax.annotate(significance, (1.01, y), annotation_clip=False, verticalalignment='center')
 			# ax.annotate('{significance} (N={N_2_and_5: >4}/{N: >4}, p={p_val:.4f})'.format(N=N, N_2_and_5=N_2_and_5, p_val=p_val, significance=significance), (1.01, y), xycoords='data', annotation_clip=False)
 		ax.set_title(origin+' suffixes')
+		ax.set_yticklabels(new_labels)
+		ax.set_title(origin+' suffixes')
 	plt.subplots_adjust(hspace=0.5)
 	handles, labels = ax.get_legend_handles_labels()
 	fig.legend(handles, labels, loc='upper right')
-	ax.set_xlabel('Relative freq. of MAP categories')
+	ax.set_xlabel("Proportions of the bases' MAP categories")
 	axes[num_origins//2].set_ylabel('Suffixes')
 	fig.suptitle('MAP classification of the bases of the %i most common suffixes' % df_suffixed.shape[0])
-	plt.savefig(os.path.join(result_dir,'bar_base-of-suffixed_MAP.png'), bbox_inches='tight')
+	plt.savefig(os.path.join(result_dir,'bar_base-of-suffixed_MAP_derivational-corpus.png'), bbox_inches='tight')
 	fig.clear()
 
 	# df_suffixed.reset_index().rename(columns={'index':'suffix'}).to_csv(os.path.join(result_dir,'suffix_classification.tsv'), sep='\t', encoding='utf-8')
@@ -120,7 +125,7 @@ if __name__=='__main__':
 	df_data = df_data[~df_data.map_sublex_base.isnull()]
 
 	df_origin = pd.read_csv(args.origin_path)
-	df_origin['suffix'] = df_origin.suffix.map(lambda s: s if s.startswith('-') else '-' + s)
+	# df_origin['suffix'] = df_origin.suffix.map(lambda s: s if s.startswith('-') else '-' + s)
 
 	df_stick = pd.read_hdf(args.hdf_path, key='/sublex/stick')
 	log_assignment_probs = ppi.get_log_assignment_probs(df_stick)

@@ -10,7 +10,7 @@ plt.rcParams['axes.prop_cycle'] = cycler(color=c)
 import seaborn as sns
 # import my_autopct
 
-def bar(result_path):
+def bar(result_path, rename_sublex=False):
 	df=pd.read_csv(result_path)
 	result_dir = os.path.dirname(result_path)
 	sublex_ids=[colname for colname in df.columns if colname.startswith('sublex_')]
@@ -30,7 +30,10 @@ def bar(result_path):
 	num_categories = map_counts.size
 	# cm = {format_sublex_name(sublex):'C{ix}'.format(ix=ix) for ix,sublex in enumerate(map_counts.index.tolist())}
 	# plt.style.use('seaborn')
-	ax = map_counts.to_frame().T.rename(columns=format_sublex_name).plot.barh(stacked=True)#, colormap=lambda x: 'C{ix}'.format(ix=int(x*(num_categories-1))))
+	if rename_sublex:
+		ax = map_counts.to_frame().T.rename(columns=format_sublex_name).plot.barh(stacked=True)#, colormap=lambda x: 'C{ix}'.format(ix=int(x*(num_categories-1))))
+	else:
+		ax = map_counts.to_frame().T.plot.barh(stacked=True)
 	for p in ax.patches:
 		width = p.get_width()
 		height = p.get_height()
@@ -57,10 +60,11 @@ def format_sublex_name(original):
 	if ix in ix2new_name:
 		return r'\textsc{Sublex}\textsubscript{$\approx$' + ix2new_name[ix] + r'}'
 	else:
-		return original
+		return r'\textsc{Sublex}\textsubscript{' + str(ix) + r'}'
 	
 if __name__=='__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('result_path', type=str, help='Path to the csv containing classification results.')
+	parser.add_argument('--rename_sublex', action='store_true', help='If selected, rename the sublexes according to a hard-coded rule.')
 	args = parser.parse_args()
-	bar(args.result_path)
+	bar(args.result_path, rename_sublex=args.rename_sublex)
