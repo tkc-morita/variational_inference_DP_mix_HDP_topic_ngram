@@ -1,10 +1,17 @@
 # coding: utf-8
 
 import pandas as pd
+import scipy.stats
 import argparse
 
 def get_correlation(df, var1, var2, method = 'spearman'):
-	print df.loc[:,[var1,var2]].corr(method = method)
+	# print df.loc[:,[var1,var2]].corr(method = method)
+	if method=='pearson':
+		print(scipy.stats.pearsonr(df[var1], df[var2]))
+	elif method=='spearman':
+		print(scipy.stats.spearmanr(df[var1], df[var2]))
+	elif method=='kendall':
+		print(scipy.stats.kendalltau(df[var1], df[var2]))
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
